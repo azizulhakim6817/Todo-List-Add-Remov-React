@@ -6,54 +6,43 @@ const App = () => {
   const [item, setItem] = useState("");
 
   const AddToList = () => {
-    if (item.trim()) {
-      // Prevent empty tasks
-      setList([...list, item]);
-      setItem(""); // Clear input after adding
-    } else {
-      alert("Please enter a valid task."); // Alert for empty input
-    }
+    list.push(item);
+    setList([...list]);
   };
 
   const RemoveItem = (index) => {
-    const newList = list.filter((_, i) => i !== index);
-    setList(newList);
+    /* alert(index); */
+    list.splice(index, 1);
+    setList([...list]);
   };
 
   return (
-    <div className="container mt-5">
-      <h3 className="mb-4 text-center">Todo List</h3>
-
+    <div className="container mt-5 col-8">
+      <h3 className="mb-4">Todo List</h3>
       <div className="input-group mb-3">
         <input
           type="text"
           className="form-control"
-          value={item}
           onChange={(e) => setItem(e.target.value)}
+          value={item}
           placeholder="Add a new task..."
-          aria-label="New Task"
         />
         <button className="btn btn-primary" onClick={AddToList}>
           Add
         </button>
       </div>
-
-      <table className="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Task</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
+      <table className="table table-striped">
         <tbody>
-          {list.length > 0 ? (
+          {list.length !== 0 ? (
             list.map((element, index) => (
               <tr key={index}>
                 <td>{element}</td>
                 <td>
                   <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => RemoveItem(index)}
+                    className="btn btn-danger"
+                    onClick={() => {
+                      RemoveItem(index);
+                    }}
                   >
                     Remove
                   </button>
@@ -62,9 +51,7 @@ const App = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="2" className="text-center">
-                <i>No tasks available</i>
-              </td>
+              <td>No tasks available</td>
             </tr>
           )}
         </tbody>
