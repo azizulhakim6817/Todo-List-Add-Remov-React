@@ -1,5 +1,5 @@
-import { useState } from "react";
-import "./assets/css/todoList.css"; // Make sure to import the CSS file
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 const App = () => {
   const [list, setList] = useState([]);
@@ -7,8 +7,11 @@ const App = () => {
 
   const AddToList = () => {
     if (item.trim()) {
+      // Prevent empty tasks
       setList([...list, item]);
       setItem(""); // Clear input after adding
+    } else {
+      alert("Please enter a valid task."); // Alert for empty input
     }
   };
 
@@ -18,35 +21,54 @@ const App = () => {
   };
 
   return (
-    <div className="container ">
-      <h3>Todo Item List Add </h3>
-      <input
-        type="text"
-        value={item}
-        onChange={(e) => setItem(e.target.value)}
-        className="input"
-        placeholder="Add a new task..."
-      />
-      <button onClick={AddToList} className="button">
-        Add
-      </button>
-      <ol className="todo-list">
-        {list.length > 0 ? (
-          list.map((element, index) => (
-            <li key={index} className="todo-item">
-              {element}
-              <button
-                onClick={() => RemoveItem(index)}
-                className="remove-button"
-              >
-                Remove
-              </button>
-            </li>
-          ))
-        ) : (
-          <li className="empty-state">No Tasks Available</li>
-        )}
-      </ol>
+    <div className="container mt-5">
+      <h3 className="mb-4 text-center">Todo List</h3>
+
+      <div className="input-group mb-3">
+        <input
+          type="text"
+          className="form-control"
+          value={item}
+          onChange={(e) => setItem(e.target.value)}
+          placeholder="Add a new task..."
+          aria-label="New Task"
+        />
+        <button className="btn btn-primary" onClick={AddToList}>
+          Add
+        </button>
+      </div>
+
+      <table className="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Task</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {list.length > 0 ? (
+            list.map((element, index) => (
+              <tr key={index}>
+                <td>{element}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => RemoveItem(index)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="2" className="text-center">
+                <i>No tasks available</i>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };
